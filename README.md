@@ -1,6 +1,8 @@
 # CheaPhone-Server
 Server for the CheaPhone android application
 
+Designed to work with GNU/Linux but I think could be easily adapted to Windows
+
 Copyright 2014 Bortoli Tomas
 
     This program is free software: you can redistribute it and/or modify
@@ -17,7 +19,9 @@ Copyright 2014 Bortoli Tomas
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 The server of cheaphone must provide 2 basics services:
+
 -Update market offers to clients that have old offers
+
 -Translate mobile numbers into operators (exploiting TIM 456 service) and using an internal cache
 
 This project make use of gammu [in form of CLI tool] to send sms through internet keys aka GSM/UMTS modems 
@@ -30,7 +34,9 @@ A mechanism of symmetric key caching is implemented into the system, to improve 
 More details in the code
 
 *Important* to run the server:
+
 -You need to install a certificate file with name "CA_key.pkcs8.pem" in the cwd of the server
+
 -The file of offers is needed with name "fileOfOffers" in server's cwd
 
 
