@@ -1,6 +1,9 @@
 # CheaPhone-Server
 Server for the CheaPhone android application
 
+Cheaphone is also called BestOffer [original name] especially in the comments in code.
+
+
 Designed to work with GNU/Linux but I think could be easily adapted to Windows
 
 Copyright 2014 Bortoli Tomas
