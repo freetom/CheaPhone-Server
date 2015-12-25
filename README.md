@@ -22,7 +22,7 @@ The server of cheaphone must provide 2 basics services:
 
 -Update market offers to clients that have old offers
 
--Translate mobile numbers into operators (exploiting TIM 456 service) and using an internal cache
+-Translate mobile numbers into operators (exploiting TIM sms service at 456 number) and using an internal cache
 
 This project make use of gammu [in form of CLI tool] to send sms through internet keys aka GSM/UMTS modems 
 
