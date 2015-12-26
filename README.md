@@ -37,6 +37,7 @@ RSA 1024-bit for key exchange, AES 128-bit for symmetric encryption and SHA1+RSA
 Any message from the server is signed and the client verifies it upon arrival; if the message sign isn't valid the connection is closed. Public key of the server is hardcoded in the client.
 
 Any encrypted message from any source come with some random padding to enforce encryption
+
 A mechanism of symmetric key caching is implemented into the system; to improve performances
 
 More details in the code
