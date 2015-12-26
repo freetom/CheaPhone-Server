@@ -30,9 +30,10 @@ The server of cheaphone must provide 2 basics services:
 This project make use of gammu [in form of CLI tool] to send sms through internet keys aka GSM/UMTS modems 
 
 The server implement cryptography and digital signature in network communications
-Any message from the server is signed and verified on the client side
+RSA 1024-bit for key exchange, AES 128-bit for symmetric encryption and SHA1+RSA for digital signature.
+Any message from the server is signed and verified on the client side; Public key of the server is hardcoded in the client.
 Any encrypted message from any source came with some random padding to enforce encryption
-A mechanism of symmetric key caching is implemented into the system, to improve performances
+A mechanism of symmetric key caching is implemented into the system; to improve performances
 
 More details in the code
 
