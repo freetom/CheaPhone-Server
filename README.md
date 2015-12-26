@@ -27,7 +27,9 @@ The server of cheaphone must provide 2 basics services:
 
 -Translate mobile numbers into operators (exploiting TIM sms service at 456 number) and using an internal cache
 
+
 This project make use of gammu [in form of CLI tool] to send sms through internet keys aka GSM/UMTS modems 
+
 
 
 The server implement cryptography and digital signature in network communications
@@ -39,6 +41,7 @@ Any message from the server is signed and the client verifies it upon arrival; i
 Any encrypted message from any source come with some random padding to enforce encryption
 
 A mechanism of symmetric key caching is implemented into the system; to improve performances
+
 
 More details in the code
 
