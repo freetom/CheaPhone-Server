@@ -28,6 +28,11 @@ public class Utilities {
 		System.out.println(new Timestamp(date.getTime()));
 	}
 	
+	public static void printTimestampInline(){
+		java.util.Date date= new java.util.Date();
+		System.out.print(new Timestamp(date.getTime()));
+	}
+	
 	public static Date addDays(Date date, int days)
     {
         Calendar cal = Calendar.getInstance();

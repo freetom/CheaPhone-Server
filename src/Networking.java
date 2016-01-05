@@ -21,38 +21,32 @@
  * Server BestOffer 
  * 
  * Class that handles the clients that connects spawning a per client thread.
- * It also handle the procol between client best offer and server, the initial 
+ * It also handle the protocol between client best offer and server, the initial 
  * key exchange, and the "big" loop
- * This class is configured to drive as the server side of the scene
+ * This class is written to drive the server side of the scene
  * 
  * Developer: Bortoli Tomas
  * 
  * */
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import sun.misc.*;
-
 import javax.crypto.spec.SecretKeySpec;
 
 /*
- * Class that handles clients. Every client request.
+ * Class that handles clients. Every client request from a network perspective.
  * 
  * Bortoli Tomas
  * 
@@ -93,12 +87,19 @@ class ThreadDispatchClients implements Runnable{
 		c=new Cryptography();
 		
 		
-		System.out.println("Got connection from: "+s.getRemoteSocketAddress().toString());
-		Utilities.printTimestamp();
+		//System.out.println("Got connection from: "+s.getRemoteSocketAddress().toString());
+		//Utilities.printTimestamp();
+		
 		
 		
 	}
 	
+	private static void print_conn_state(){
+		System.out.print("n of connections: "+nOfClients+"/"+MAX_CLIENTS_N+"\t\t");
+		Utilities.printTimestampInline();
+		System.out.print("\r");
+		System.out.flush();
+	}
 	private static String randomPadding(){
 		Random r=new Random();
 		int len=(Math.abs(r.nextInt())%48)+16;
@@ -181,8 +182,9 @@ class ThreadDispatchClients implements Runnable{
 		//one client less connected to the server
 		nOfClients--;
 		
-		System.out.println("Connection terminated, "+nOfClients+" remained");
-		Utilities.printTimestamp();
+		//System.out.println("Connection terminated, "+nOfClients+" remained");
+		//Utilities.printTimestamp();
+		print_conn_state();
 	}
 	
 	private Boolean keyCaching() throws Exception{
@@ -239,6 +241,7 @@ class ThreadDispatchClients implements Runnable{
 	public void run() {
 		
 		nOfClients++;
+		print_conn_state();
 		if(nOfClients>MAX_CLIENTS_N){
 			System.out.println("Server has enough clients for now, terminating connection.");
 			try {
@@ -327,7 +330,7 @@ class ThreadDispatchClients implements Runnable{
 					if(pieces[0].equals(Networking.UPDATE_FILE_OF_OFFERS)){
 						
 						n.rwlock.readLock().lock();
-						System.out.println("A client's dispatcher has taken the mutex in read mode. N readers: "+(++readers));
+						//System.out.println("A client's dispatcher has taken the mutex in read mode. N readers: "+(++readers));
 						
 						try{
 							byte[] hash=receiveMessageNotEncrypted();
@@ -352,7 +355,7 @@ class ThreadDispatchClients implements Runnable{
 						}
 						catch(Exception e){}
 						
-						System.out.println("A client's dispatcher has released the mutex in read mode. N readers: "+(--readers));
+						//System.out.println("A client's dispatcher has released the mutex in read mode. N readers: "+(--readers));
 						n.rwlock.readLock().unlock();
 					}
 					else{
@@ -363,7 +366,7 @@ class ThreadDispatchClients implements Runnable{
 				
 			}
 			catch(Exception e){
-				System.out.println(e.getMessage());
+				//System.out.println(e.getMessage());
 				byeMessage();
 				return;
 			}
@@ -394,7 +397,7 @@ class ThreadUpdateOffers implements Runnable{
 			
 			//Get the lock
 			n.rwlock.writeLock().lock();
-			System.out.println("Check for new offers thread has taken the mutex");
+			//System.out.println("Check for new offers thread has taken the mutex");
 			try{
 				String old_offers=n.offers;
 				
@@ -421,7 +424,7 @@ class ThreadUpdateOffers implements Runnable{
 				System.out.println(e.toString());
 			}
 			
-			System.out.println("Check for new offers thread has released the mutex");
+			//System.out.println("Check for new offers thread has released the mutex");
 		    //Free the lock
 		    n.rwlock.writeLock().unlock();
 		    

@@ -20,7 +20,8 @@
 /* 
  * Server BestOffer 
  * 
- * Class used to send an sms, and receive the answer directly converted into an operator.
+ * This class handles all the requests and responses from the GSM modems.
+ * Used to send an sms, and receive the answer directly converted into an operator.
  * It also has 2 public method to execute command in shell.
  * Totally static
  * 
@@ -35,19 +36,31 @@ import java.io.IOException;
 public class SendReceiveSms {
 	 
 	/*
-	 * This class support multiples GSM GPRS modems usage to convert number into operator, using 456 TIM's service.
-	 * To have gammu configured to work with this code, you need a configuration on the config file with differtent 
-	 * sections, one for each modem, starting from 0 to n-1. The number of internet keys is hardcoded into the code, for now.
+	 * This class does support multiples GSM/GPRS modems; 
+	 * used to convert numbers into operators, using 456 TIM's service.
+	 * To have gammu configured to work with this code, you need a configuration on the 
+	 * @configFileLocation with different sections, one for each modem, starting from 0 to n-1. 
+	 * The number of internet keys (or GSM modems) is hard-coded, for now.
 	 * 
 	 * Bortoli Tomas
 	 * 
-	 * */
+	 * /
 	
+	/**
+	 * How many modems do we have connected to the server?
+	 */
 	static final short nOfModems=1;
+	
+	/**
+	 * Mutexes for GSM modems. Mutual exclusion is required for 2 reasons:
+	 * -Cannot launch more instance of gammu simultaneously on the same device
+	 * -Cannot send more sms to 456 and wait for more answers. Because answers do 
+	 * not contain information on the request. So must be made one by one.
+	 */
 	static MutualExclusion[] me=new MutualExclusion[nOfModems];
 	
 	static int counter=0;
-	final static int delay_wait_sms_ms=300000;
+	final static int delay_wait_sms_ms=600000; // equals to 10 minutes of maximum delay
 	
 	public static String TIM="TIM";
 	public static String VODAFONE="VODAFONE";
@@ -57,13 +70,29 @@ public class SendReceiveSms {
 	public static String POSTE_MOBILE="POSTE MOBILE";
 	public static String TISCALI="TISCALI";
 	
+	/**
+	 * Value returned when some error occurs on the parsing of the input number 
+	 * or some error from the GSM modem and the server program
+	 */
 	public static String INVALID="INVALID";
+	
+	/**
+	 * Returned when the cache must save the number as INVALID;
+	 * the value is used to prevent infinite requests of the same number
+	 * (maybe a deactivated number) that never goes into cache because 456 
+	 * bad answers.
+	 * Also used when real timeout occurs on 456 response
+	 */
 	public static String TIMEOUT="TIMEOUT";
 	
-	//the location of the configuration file for gammu
+	/**
+	 * the location of the configuration file for gammu
+	 */
 	private final static String configFileLocation="\"/root/.gammurc\"";
 	
-	//initialize the GSM GPRS modems attached to the server
+	/**
+	 * initialize the GSM modems mutexes
+	 */
 	public static void initModems(){
 		for(int i=0;i<me.length;i++)
 			me[i]=new MutualExclusion();
@@ -144,7 +173,9 @@ public class SendReceiveSms {
 		
 		String res=null;
 		try{
-			//If the number is not 10 ciphers, return invalid operator. No number can be longer than 13 also with +39 before the number
+			//If the number is not 10 ciphers, return invalid operator. 
+			//No number can be longer than 13 also with +39 before the number (ITALY)
+			//And I assume that mobile numbers arrive here with 10 digits, because client parse them
 			if(number.length()!=10 || startWithPrefix(number)){
 				me[index].unlock();
 				return INVALID;
@@ -230,10 +261,9 @@ public class SendReceiveSms {
 			return numberToOperator(number);
 		}
 		
-		//Conta quante occorrenze dei nomi degli operatori ci sono nei messaggi. Se ce n'è più d'una, ci sono incongruenze,
-		//probabilmente qualcuno sta facendo injection inviando i messaggi direttamente al server e facendogli credere che
-		//siano risposte valide
-		//riprova a mandare il messaggio e attendi la risposta.
+		/**
+		 * Check if there is any incongruence in the response string
+		 */
 		counter=0;
 		if(res.contains(TIM))
 			counter++;
@@ -254,6 +284,9 @@ public class SendReceiveSms {
 			return numberToOperator(number);
 		}
 		
+		/**
+		 * Return the correct operator
+		 */
 		if(res.contains(TIM))
 			return TIM;
 		else if(res.contains(WIND))
@@ -270,7 +303,7 @@ public class SendReceiveSms {
 			return TISCALI;
 		else{
 			System.out.println(res);
-			return INVALID;
+			return TIMEOUT;
 		}
 		
 	}
