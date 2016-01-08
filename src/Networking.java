@@ -86,6 +86,7 @@ class ThreadDispatchClients implements Runnable{
 		
 		c=new Cryptography();
 		
+		nOfClients++;
 		
 		//System.out.println("Got connection from: "+s.getRemoteSocketAddress().toString());
 		//Utilities.printTimestamp();
@@ -240,7 +241,7 @@ class ThreadDispatchClients implements Runnable{
 	@Override
 	public void run() {
 		
-		nOfClients++;
+		
 		print_conn_state();
 		if(nOfClients>MAX_CLIENTS_N){
 			System.out.println("Server has enough clients for now, terminating connection.");
