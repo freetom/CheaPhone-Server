@@ -31,7 +31,7 @@ This project make use of gammu [in form of CLI tool] to send sms through interne
 
 
 The server implement cryptography and digital signature in network communications<br/>
-RSA 1024-bit for key exchange, AES 128-bit for symmetric encryption and SHA1+RSA for digital signature.<br/>
+RSA 1024-bit for key exchange, AES 128-bit for symmetric encryption and SHA1+RSA(1024-bit) for digital signature.<br/>
 Any message from the server is signed and the client verifies it upon arrival; if the message sign isn't valid the connection is closed. Public key of the server is hardcoded in the client.<br/>
 Any encrypted message from any [of the two] source come with some random padding to enforce encryption<br/>
 A mechanism of symmetric key caching is implemented into the system; to improve performances. It impplies that the same key is used for a series of n consecutive days. Now it's only 4.
