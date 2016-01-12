@@ -41,7 +41,7 @@ Random padding of random length is added around each encrypted message; to limit
 More details in the code
 
 *Important* to run the server:<br/>
--You need to install the private key file with name "private.key.pkcs8" in the cwd of the server<br/>
+-You need to install the private key file with name "private.key.pkcs8" in the cwd of the server [pkcs8 encoding]<br/>
 -The file of offers is needed with name "fileOfOffers" in server's cwd
 
 openssl used to generate and encode RSA crypto keys
