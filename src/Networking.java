@@ -117,9 +117,9 @@ class ThreadDispatchClients implements Runnable{
 		
 		message=randomPadding()+Networking.SEPARATOR+message+Networking.SEPARATOR+randomPadding();
 		
-		//If not multiple of 16, fill with padding (this because the aes implemented in the library used here require a message that is multiple of 16 in length)
-		int rest=message.length()%16;
-		if(rest!=0)	rest=16-rest;
+		//If not multiple of 32, fill with padding ___	AES-256-bit-blocks
+		int rest=message.length()%32;
+		if(rest!=0)	rest=32-rest;
 		while(rest>0){
 			message+=Networking.filler;
 			rest--;

@@ -56,8 +56,8 @@ public class Cryptography {
 	SecretKey aesKey;
 	Cipher aesEnc,aesDec;
 	
-	final short rsaKeyLenBits=1024;
-	final short aesKeyLenBits=128;
+	final short rsaKeyLenBits=2048;
+	final short aesKeyLenBits=256;
 	
 	static Signature sig;
 	static PrivateKey sigPvk;
@@ -197,7 +197,7 @@ public class Cryptography {
     	
     	sig = Signature.getInstance("SHA1WithRSA");
     	
-    	sigPvk=(PrivateKey)readPEMKey(new File("CA_key.pkcs8.pem"));
+    	sigPvk=(PrivateKey)readPEMKey(new File("private.key.pkcs8"));
     	RSAPrivateCrtKey privk = (RSAPrivateCrtKey)sigPvk;
     	RSAPublicKeySpec publicKeySpec = new java.security.spec.RSAPublicKeySpec(privk.getModulus(),privk.getPublicExponent());
 
