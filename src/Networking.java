@@ -117,7 +117,7 @@ class ThreadDispatchClients implements Runnable{
 		
 		message=randomPadding()+Networking.SEPARATOR+message+Networking.SEPARATOR+randomPadding();
 		
-		//If not multiple of 32, fill with padding ___	AES-256-bit-blocks
+		//If not multiple of 32, fill with padding ___	AES-256-bit-blocks (128-bits is the correct size), 256 is "expanded"
 		int rest=message.length()%32;
 		if(rest!=0)	rest=32-rest;
 		while(rest>0){
@@ -320,7 +320,7 @@ class ThreadDispatchClients implements Runnable{
 					}
 					
 					//Send all the operators of the numbers asked from the client
-					sendMessage(responseCommand);
+					sendMessage(responseCommand.substring(0,responseCommand.length()-1));
 				}
 				//else if the client is asking for the updated file, send it!
 				else{
