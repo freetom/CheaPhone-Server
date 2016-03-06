@@ -128,6 +128,7 @@ public class SendReceiveSms {
 	private static void commandDelete(String[] command) throws IOException, InterruptedException{
 		while(true){
 			String result=execCmd(command);
+			System.out.println(command[2]+"=>"+result);
 			//if the "phone" does not answer in time, retry the command 
 			if(result.contains("Nessuna risposta")) Thread.sleep(500);
 			else break;
@@ -164,6 +165,7 @@ public class SendReceiveSms {
 	
 	
 	public static String numberToOperator(String number) throws IOException, InterruptedException{
+		System.out.println("into \"numberToOperator\"");
 		
 		int index=getFirstFreeModem();
 		//Enter into the critical region, lock the mutex.
@@ -217,7 +219,7 @@ public class SendReceiveSms {
 				
 				counter+=10000;
 				Thread.sleep(10000);
-				
+				System.out.println("counter: "+counter);
 				if(counter>=delay_wait_sms_ms){
 					commandDelete(new String[]{"/bin/sh", "-c", "gammu -c "+configFileLocation+" "+selectKey(index)+" deleteallsms 1"});
 					commandDelete(new String[]{"/bin/sh", "-c", "gammu -c "+configFileLocation+" "+selectKey(index)+" deleteallsms 3"});
@@ -258,6 +260,7 @@ public class SendReceiveSms {
 		res=res.toUpperCase();
 		
 		if(res.contains("IL SERVIZIO NON E' AL MOMENTO DISPONIBILE.")){
+			Thread.sleep(60000);
 			return numberToOperator(number);
 		}
 		
@@ -309,7 +312,6 @@ public class SendReceiveSms {
 	}
 	
 	public static String execCmd(final String[] cmd) throws java.io.IOException {
-		System.out.println(cmd[2]);
         java.util.Scanner s = new java.util.Scanner(Runtime.getRuntime().exec(cmd).getInputStream()).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }

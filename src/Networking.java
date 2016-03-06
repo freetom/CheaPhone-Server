@@ -510,7 +510,7 @@ public class Networking{
 	Cryptography c;
 	
 	
-	public String offers="";
+	public volatile String offers="";
 	public byte[] offersHash;
 	//Mutex that support one writer and more readers to a single object
 	public ReadWriteLock rwlock;
