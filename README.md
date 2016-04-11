@@ -30,7 +30,8 @@ This project make use of gammu [in form of CLI tool] to send sms through interne
 
 
 
-The server implement cryptography and digital signature in network communications<br/>
+The server implement cryptography and digital signature in network communications. <br/>
+Property provided to the communication are: Secrecy, Authentication(of server) and Forward-Secrecy.
 RSA 2048-bit for key exchange, AES 256-bit for symmetric encryption and SHA1+RSA(2048-bit) for digital signature.<br/>
 Any message from the server is signed and the client verifies it upon arrival; if the message sign isn't valid the connection is closed. Public key used to verify the digital signature made by the server is hardcoded in the client.<br/>
 Any encrypted message from any [of the two] sources come with some random padding to enforce encryption<br/>
